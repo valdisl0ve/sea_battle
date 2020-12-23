@@ -1,6 +1,6 @@
 #include <iostream>
 #include <ctime>
-
+#include <cstdlib>
 using namespace std;
 
 const int rows = 10;
@@ -9,6 +9,9 @@ const int elements = 10;
 int maxships = 10;
 
 int matrix[rows][elements];
+
+    char battle_haze[rows][elements];
+
 
 void Clear()
 {
@@ -20,6 +23,26 @@ void Clear()
         }
     }
 }
+
+void Clear_battle_haze()
+{
+    for(int i=0; i < rows; i++)
+    {
+        for(int j=0; j < elements; j++)
+        {
+            battle_haze[i][j] = '*';
+
+
+        }
+    }
+}
+
+
+
+
+
+
+
 
 void Show()
 {
@@ -33,7 +56,71 @@ void Show()
     }
 }
 
-int NumberOfShips()
+void Show_battle_haze1()
+{
+
+    for(int i=0; i < rows; i++) {
+        for (int j = 0; j < elements; j++) {
+
+            if (matrix[i][j] == 1){
+
+                battle_haze[i][j] = '1';
+            }
+
+        }
+    }
+
+
+    for(int i=0; i < rows; i++)
+    {
+        for(int j=0; j < elements; j++)
+        {
+            cout << battle_haze[i][j] << "\t";
+
+
+
+
+
+        }
+        cout << endl;
+    }
+}
+
+
+
+void Show_battle_haze2()
+{
+
+    for(int i=0; i < rows; i++) {
+        for (int j = 0; j < elements; j++) {
+
+            if (matrix[i][j] == 2){
+
+                battle_haze[i][j] = '2';
+            }
+
+        }
+    }
+
+
+    for(int i=0; i < rows; i++)
+    {
+        for(int j=0; j < elements; j++)
+        {
+            cout << battle_haze[i][j] << "\t";
+
+
+
+
+
+        }
+        cout << endl;
+    }
+}
+
+
+
+int NumberOfShips1()
 {
     int c = 0;
 
@@ -42,6 +129,23 @@ int NumberOfShips()
         for(int j=0; j < elements; j++)
         {
             if(matrix[i][j] == 1)
+                c++;
+        }
+    }
+
+    return c;
+}
+
+
+int NumberOfShips2()
+{
+    int c = 0;
+
+    for(int i=0; i < rows; i++)
+    {
+        for(int j=0; j < elements; j++)
+        {
+            if(matrix[i][j] == 2)
                 c++;
         }
     }
@@ -82,15 +186,18 @@ bool Attack(int x,int y)
     if(matrix[x][y] == 1)
     {
         matrix[x][y] = -1;
+        battle_haze[x][y] = 'X';
         return true;
     }
+    battle_haze[x][y] = 'X';
 
     if(matrix[x][y] == 2)
     {
         matrix[x][y] = -2;
+        battle_haze[x][y] = 'X';
         return true;
     }
-
+    battle_haze[x][y] = 'X';
 
     return false;
 }
@@ -99,56 +206,70 @@ int main()
 {
     srand(time(NULL));
     Clear();
+    Clear_battle_haze();
     SetShips();
     int pos1,pos2;
     int player = 1;
     char prompt;
+
+
+
     while(true)
     {
 
         if(player == 1){
+            system("cls");
             cout << "PLAYER 1" << endl;
-        cout << "Please input location. \n " << "Coordinate 1: "<< endl;
-        cin >> pos1;
-        // провекра на диапазон
-        while (pos1 < 0 || pos1 > 9){
-            cout << "Wrong location! From 0 to 9 please! \n " << "Coordinate 1: "<< endl;
+            cout << "BATTLE HAZE" << endl;
+            Show_battle_haze1();
+            cout << "Please input location. \n " << "Coordinate 1: "<< endl;
             cin >> pos1;
-        }
 
-        cout << "Coordinate 2: " << endl;
-        cin >> pos2;
-        // провекра на диапазон
-        while (pos2 < 0 || pos2 > 9){
-            cout << "Wrong location! From 0 to 9 please! \n " << "Coordinate 2: "<< endl;
+            // провекра на диапазон
+            while (pos1 < 0 || pos1 > 9){
+                cout << "Wrong location! From 0 to 9 please! \n " << "Coordinate 1: "<< endl;
+                cin >> pos1;
+            }
+
+            cout << "Coordinate 2: " << endl;
             cin >> pos2;
-        }
+            // провекра на диапазон
+            while (pos2 < 0 || pos2 > 9){
+                cout << "Wrong location! From 0 to 9 please! \n " << "Coordinate 2: "<< endl;
+                cin >> pos2;
+            }
 
 
-        if(Attack(pos1,pos2)) {
-            cout << "You got me! :)" << endl;
-        }
-        else {
-            cout << "Sorry no ship at that position!" << endl;
-            cout << "Number of ships left: " << NumberOfShips() << endl;
-            cout << "Do you want to continue (y/n)? " << endl;
-            cin >> prompt;
+            if(Attack(pos1,pos2)) {
+                cout << "You got me! :)" << endl;
 
-            // провекра на символ
-            while (prompt != 'y' && prompt != 'n'){
-                cout << "Wrong symbol! Please try - (y/n) " << endl;
+            }
+            else {
+                cout << "Sorry no ship at that position!" << endl;
+                cout << "Number of ships left: " << NumberOfShips2() << endl;
+
+                cout << "Do you want to continue (y/n)? " << endl;
                 cin >> prompt;
+
+                // провекра на символ
+                while (prompt != 'y' && prompt != 'n'){
+                    cout << "Wrong symbol! Please try - (y/n) " << endl;
+                    cin >> prompt;
+                }
             }
-        }
-        if(prompt == 'n'){
-            break;
+            if(prompt == 'n'){
+                break;
             }
+            player = 2;
 
         }
-        player = 2;
+
 
         if (player == 2) {
+            system("cls");
             cout << "PLAYER 2" << endl;
+            cout << "BATTLE HAZE" << endl;
+            Show_battle_haze2();
             cout << "Please input location. \n " << "Coordinate 1: "<< endl;
             cin >> pos1;
             // провекра на диапазон
@@ -168,10 +289,12 @@ int main()
 
             if(Attack(pos1,pos2)) {
                 cout << "You got me! :)" << endl;
+
             }
             else {
                 cout << "Sorry no ship at that position!" << endl;
-                cout << "Number of ships left: " << NumberOfShips() << endl;
+                cout << "Number of ships left: " << NumberOfShips1() << endl;
+
                 cout << "Do you want to continue (y/n)? " << endl;
                 cin >> prompt;
 
@@ -185,6 +308,7 @@ int main()
                 break;
             }
             player = 1;
+
         }
 
 
