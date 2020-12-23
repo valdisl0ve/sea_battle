@@ -1,0 +1,202 @@
+#include <iostream>
+#include <ctime>
+
+using namespace std;
+
+const int rows = 10;
+const int elements = 10;
+
+int maxships = 10;
+
+int matrix[rows][elements];
+
+void Clear()
+{
+    for(int i=0; i < rows; i++)
+    {
+        for(int j=0; j < elements; j++)
+        {
+            matrix[i][j] = 0;
+        }
+    }
+}
+
+void Show()
+{
+    for(int i=0; i < rows; i++)
+    {
+        for(int j=0; j < elements; j++)
+        {
+            cout << matrix[i][j] << "\t";
+        }
+        cout << endl;
+    }
+}
+
+int NumberOfShips()
+{
+    int c = 0;
+
+    for(int i=0; i < rows; i++)
+    {
+        for(int j=0; j < elements; j++)
+        {
+            if(matrix[i][j] == 1)
+                c++;
+        }
+    }
+
+    return c;
+}
+
+void SetShips()
+{
+    int s = 0;
+    while(s < maxships)
+    {
+        int x = rand() % rows;
+        int y = rand() % elements;
+        if(matrix[x][y] != 1)
+        {
+            s++;
+            matrix[x][y] = 1;
+        }
+    }
+
+    s = 0;
+    while(s < maxships)
+    {
+        int x = rand() % rows;
+        int y = rand() % elements;
+        if(matrix[x][y] != 1 && matrix[x][y] != 2)
+        {
+            s++;
+            matrix[x][y] = 2;
+        }
+    }
+
+}
+
+bool Attack(int x,int y)
+{
+    if(matrix[x][y] == 1)
+    {
+        matrix[x][y] = -1;
+        return true;
+    }
+
+    if(matrix[x][y] == 2)
+    {
+        matrix[x][y] = -2;
+        return true;
+    }
+
+
+    return false;
+}
+
+int main()
+{
+    srand(time(NULL));
+    Clear();
+    SetShips();
+    int pos1,pos2;
+    int player = 1;
+    char prompt;
+    while(true)
+    {
+
+        if(player == 1){
+            cout << "PLAYER 1" << endl;
+        cout << "Please input location. \n " << "Coordinate 1: "<< endl;
+        cin >> pos1;
+        // провекра на диапазон
+        while (pos1 < 0 || pos1 > 9){
+            cout << "Wrong location! From 0 to 9 please! \n " << "Coordinate 1: "<< endl;
+            cin >> pos1;
+        }
+
+        cout << "Coordinate 2: " << endl;
+        cin >> pos2;
+        // провекра на диапазон
+        while (pos2 < 0 || pos2 > 9){
+            cout << "Wrong location! From 0 to 9 please! \n " << "Coordinate 2: "<< endl;
+            cin >> pos2;
+        }
+
+
+        if(Attack(pos1,pos2)) {
+            cout << "You got me! :)" << endl;
+        }
+        else {
+            cout << "Sorry no ship at that position!" << endl;
+            cout << "Number of ships left: " << NumberOfShips() << endl;
+            cout << "Do you want to continue (y/n)? " << endl;
+            cin >> prompt;
+
+            // провекра на символ
+            while (prompt != 'y' && prompt != 'n'){
+                cout << "Wrong symbol! Please try - (y/n) " << endl;
+                cin >> prompt;
+            }
+        }
+        if(prompt == 'n'){
+            break;
+            }
+
+        }
+        player = 2;
+
+        if (player == 2) {
+            cout << "PLAYER 2" << endl;
+            cout << "Please input location. \n " << "Coordinate 1: "<< endl;
+            cin >> pos1;
+            // провекра на диапазон
+            while (pos1 < 0 || pos1 > 9){
+                cout << "Wrong location! From 0 to 9 please! \n " << "Coordinate 1: "<< endl;
+                cin >> pos1;
+            }
+
+            cout << "Coordinate 2: " << endl;
+            cin >> pos2;
+            // провекра на диапазон
+            while (pos2 < 0 || pos2 > 9){
+                cout << "Wrong location! From 0 to 9 please! \n " << "Coordinate 2: "<< endl;
+                cin >> pos2;
+            }
+
+
+            if(Attack(pos1,pos2)) {
+                cout << "You got me! :)" << endl;
+            }
+            else {
+                cout << "Sorry no ship at that position!" << endl;
+                cout << "Number of ships left: " << NumberOfShips() << endl;
+                cout << "Do you want to continue (y/n)? " << endl;
+                cin >> prompt;
+
+                // провекра на символ
+                while (prompt != 'y' && prompt != 'n'){
+                    cout << "Wrong symbol! Please try - (y/n) " << endl;
+                    cin >> prompt;
+                }
+            }
+            if(prompt == 'n'){
+                break;
+            }
+            player = 1;
+        }
+
+
+
+
+
+    }
+    cout << "PLAYER " << player << " LOSE" <<  endl;
+    cout << "Game over!" << endl;
+
+
+    Show();
+    system("pause");
+    return 0;
+}
