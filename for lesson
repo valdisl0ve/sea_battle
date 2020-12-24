@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
+#include <conio.h>
 using namespace std;
 
 const int rows = 10;
@@ -10,7 +11,10 @@ int maxships = 10;
 
 int matrix[rows][elements];
 
-    char battle_haze[rows][elements];
+char battle_haze[rows][elements];
+int score_1 = 0;
+int score_2 = 0;
+
 
 
 void Clear()
@@ -67,6 +71,11 @@ void Show_battle_haze1()
                 battle_haze[i][j] = '1';
             }
 
+            if (matrix[i][j] == 2){
+
+                battle_haze[i][j] = '*';
+            }
+
         }
     }
 
@@ -76,10 +85,6 @@ void Show_battle_haze1()
         for(int j=0; j < elements; j++)
         {
             cout << battle_haze[i][j] << "\t";
-
-
-
-
 
         }
         cout << endl;
@@ -97,6 +102,11 @@ void Show_battle_haze2()
             if (matrix[i][j] == 2){
 
                 battle_haze[i][j] = '2';
+            }
+
+            if (matrix[i][j] == 1){
+
+                battle_haze[i][j] = '*';
             }
 
         }
@@ -181,12 +191,16 @@ void SetShips()
 
 }
 
+
+
 bool Attack(int x,int y)
 {
+
     if(matrix[x][y] == 1)
     {
         matrix[x][y] = -1;
         battle_haze[x][y] = 'X';
+
         return true;
     }
     battle_haze[x][y] = 'X';
@@ -196,11 +210,18 @@ bool Attack(int x,int y)
         matrix[x][y] = -2;
         battle_haze[x][y] = 'X';
         return true;
+
     }
     battle_haze[x][y] = 'X';
 
     return false;
 }
+
+
+
+
+
+
 
 int main()
 {
@@ -210,13 +231,13 @@ int main()
     SetShips();
     int pos1,pos2;
     int player = 1;
-    char prompt;
+    char prompt = 'w';
 
 
 
     while(true)
     {
-
+        score_2 =  NumberOfShips2();
         if(player == 1){
             system("cls");
             cout << "PLAYER 1" << endl;
@@ -240,13 +261,30 @@ int main()
             }
 
 
-            if(Attack(pos1,pos2)) {
+            if(Attack(pos1,pos2) == true) {
+
+                if (NumberOfShips2() == score_2){
+
+                    cout << "GENIUS! You hit in your ship!" << endl;
+                    cout << "Number of your ships left: " << NumberOfShips1() << endl;
+                    cout << "Number of opponent's ships left: " << NumberOfShips2() << endl;
+                    getch();
+
+                } else {
+
                 cout << "You got me! :)" << endl;
+                cout << "Number of opponent's ships left: " << NumberOfShips2() << endl;
+
+                getch();
+                }
 
             }
-            else {
+
+
+
+            else  {
                 cout << "Sorry no ship at that position!" << endl;
-                cout << "Number of ships left: " << NumberOfShips2() << endl;
+                cout << "Number of opponent's ships left: " << NumberOfShips2() << endl;
 
                 cout << "Do you want to continue (y/n)? " << endl;
                 cin >> prompt;
@@ -263,7 +301,7 @@ int main()
             player = 2;
 
         }
-
+        score_1 =  NumberOfShips1();
 
         if (player == 2) {
             system("cls");
@@ -287,13 +325,30 @@ int main()
             }
 
 
-            if(Attack(pos1,pos2)) {
-                cout << "You got me! :)" << endl;
+            if(Attack(pos1,pos2)== true) {
+
+
+                if (NumberOfShips1() == score_1){
+
+                    cout << "GENIUS! You hit in your ship!" << endl;
+                    cout << "Number of your ships left: " << NumberOfShips1() << endl;
+                    cout << "Number of opponent's ships left: " << NumberOfShips2() << endl;
+                    getch();
+
+                } else {
+
+                    cout << "You got me! :)" << endl;
+                    cout << "Number of opponent's ships left: " << NumberOfShips1() << endl;
+                    getch();
+
+                }
 
             }
-            else {
+
+
+            else  {
                 cout << "Sorry no ship at that position!" << endl;
-                cout << "Number of ships left: " << NumberOfShips1() << endl;
+                cout << "Number of opponent's ships left: " << NumberOfShips1() << endl;
 
                 cout << "Do you want to continue (y/n)? " << endl;
                 cin >> prompt;
